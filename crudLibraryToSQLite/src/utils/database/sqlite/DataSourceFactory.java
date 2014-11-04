@@ -1,9 +1,12 @@
 package utils.database.sqlite;
+
 /*
-* This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
-* Version 3.
-*/
+ * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
+ * Version 3.
+ */
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +31,12 @@ public class DataSourceFactory {
 	 * The class that define the SQLite database.
 	 */
 	private final DbHelper dbHelper;
+	/*
+	 * Concurrency look.
+	 */
+	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+	private final Lock r = rwl.readLock();
+	private final Lock w = rwl.writeLock();
 
 	/**
 	 * Return the instance for the CRUD operation.
@@ -35,8 +44,8 @@ public class DataSourceFactory {
 	 * @param context
 	 * @return the instance for the CRUD operation.
 	 */
-	public static synchronized DataSourceFactory getInstance(Context context,int dbVersion, String dbName,
-			ITables tables) {
+	public static synchronized DataSourceFactory getInstance(Context context,
+	        int dbVersion, String dbName, ITables tables) {
 		if (instance == null) {
 			instance = new DataSourceFactory(context, dbVersion, dbName, tables);
 		}
@@ -44,24 +53,30 @@ public class DataSourceFactory {
 	}
 
 	private DataSourceFactory(Context context, int dbVersion, String dbName,
-			ITables tables) {
+	        ITables tables) {
 		dbHelper = new DbHelper(context, dbVersion, dbName, tables);
 	}
 
 	public ArrayList<AFieldData> getAllRows(String table,
-			String whereCondition, String[] columns) {
-		SQLiteDatabase database = dbHelper.getWritableDatabase();
+	        String whereCondition, String[] columns) {
 		final ArrayList<AFieldData> data = new ArrayList<AFieldData>();
+		;
+		r.lock();
+		SQLiteDatabase database = dbHelper.getReadableDatabase();
+		try {
 
-		Cursor popSpin = database.query(table, columns, whereCondition, null,
-				null, null, null);
-		popSpin.moveToFirst();
-		while (popSpin.isAfterLast() == false) {
+			Cursor popSpin = database.query(table, columns, whereCondition,
+			        null, null, null, null);
+			popSpin.moveToFirst();
+			while (popSpin.isAfterLast() == false) {
 
-			data.add(dbHelper.getTables().getData(popSpin));
-			popSpin.moveToNext();
+				data.add(dbHelper.getTables().getData(popSpin));
+				popSpin.moveToNext();
+			}
+		} finally {
+			closeDb(database);
+			r.unlock();
 		}
-		database.close();
 		return data;
 	}
 
@@ -82,7 +97,8 @@ public class DataSourceFactory {
 	}
 
 	public long addRowToTable(String table, ContentValues cv) {
-		SQLiteDatabase database = dbHelper.getReadableDatabase();
+		w.lock();
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
 		database = dbHelper.getWritableDatabase();
 		long y = database.insert(table, null, cv);
 		database.close();
@@ -90,29 +106,45 @@ public class DataSourceFactory {
 	}
 
 	public long updateRowToTable(String table, ContentValues cv,
-			String whereClause) {
-		SQLiteDatabase database = dbHelper.getReadableDatabase();
-		database = dbHelper.getWritableDatabase();
-		long y = database.update(table, cv, whereClause, null);
-		database.close();
+	        String whereClause) {
+		w.lock();
+		long y = -1;
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		try {
+			y = database.update(table, cv, whereClause, null);
+			database.close();
+		} finally {
+			closeDb(database);
+			w.unlock();
+		}
 		return y;
 	}
 
-	public SQLiteDatabase getWritableDatabase() {
-		return dbHelper.getReadableDatabase();
-	}
-
-	public void removeAllColumnsAllTable() {
-		SQLiteDatabase database = dbHelper.getWritableDatabase();	
-		String[] tableNames =dbHelper.getTables().getNames();
-		int l = tableNames.length;
-		for (int i=0;i<l;i++) {
-			if (dbHelper.getTables().getColumns(i) != null) {
-				database.delete(tableNames[i], null, null);
+	public void removeAllTable() {
+		w.lock();
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		try {
+			String[] tableNames = dbHelper.getTables().getNames();
+			int l = tableNames.length;
+			for (int i = 0; i < l; i++) {
+				if (dbHelper.getTables().getColumns(i) != null) {
+					database.delete(tableNames[i], null, null);
+				}
 			}
+		} finally {
+			w.unlock();
+			closeDb(database);
 		}
-		database.close();
 
 	}
 
+	/*
+	 * Close the db.
+	 */
+	private void closeDb(SQLiteDatabase db) {
+		if (db != null && db.isOpen()) {
+			db.close();
+		}
+
+	}
 }
