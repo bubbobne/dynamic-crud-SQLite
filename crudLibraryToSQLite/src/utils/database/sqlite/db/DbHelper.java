@@ -1,9 +1,11 @@
-package utils.database.sqlite;
+package utils.database.sqlite.db;
 
 /*
  * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
  * Version 3.
  * */
+import utils.database.sqlite.api.ITables;
+import utils.database.sqlite.data.ATables;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -19,37 +21,33 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 	private final static String DROP = "DROP TABLE IF EXISTS ";
 	private static final CursorFactory DB_FACTORY = null;
-	ITables tables;
+	ATables tables;
 
-	public ITables getTables() {
+	public ATables getTables() {
 		return tables;
 	}
 
 	public DbHelper(Context appContext, int dbVersion, String dbName,
-			ITables tables) {
+	        Class<? extends ITables> tables) {
 		super(appContext, dbName, DB_FACTORY, dbVersion);
-		this.tables = tables;
+		this.tables = new ATables(tables);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// create al the table at same time.
-		String[] tableNames = tables.getNames();
-		int l = tableNames.length;
-		for (int i = 0; i < l; i++) {
-			if (tables.getColumns(i) != null) {
-				db.execSQL(Utils.getInitialQuery(tables, i));
-			}
+		String[] query = tables.getCreatequery();
+		for (String str : query) {
+			db.execSQL(str);
 		}
 
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		String[] tableNames = tables.getNames();
-		int l = tableNames.length;
-		for (int i = 0; i < l; i++) {
-			db.execSQL(DROP + tableNames[i]);
+		String[] tabs = tables.getNames();
+		for (String s : tabs) {
+			db.execSQL(DROP + s);
 		}
 		onCreate(db);
 	}

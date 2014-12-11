@@ -1,14 +1,13 @@
 package utils.database.sqlite;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /*
  *This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
  * Version 3.
  */
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.ContentValues;
-import android.util.Log;
 
 /**
  * 
@@ -38,46 +37,14 @@ public class Utils {
 		return names;
 	}
 
-	private static <T extends Enum<T>> ContentValues jsonToContentValue(
-			JSONObject jsonObject, String tablesName, ITables tables) {
-		ContentValues contentValues = new ContentValues();
-		IColumns c = tables.getColumns(tablesName);
-		String[] keys = c.getNames();
-		for (int i = 0; i < keys.length; i++) {
-			String key = keys[i];
-			Log.d("test", key);
-			if (jsonObject.has(key)) {
-				String type = c.getType(key);
-				try {
-					if (type.equals(Constants.INTEGER)) {
-						int valueToPut = jsonObject.getInt(key);
-						contentValues.put(key, valueToPut);
-						Log.d("test", key + " " + valueToPut);
-
-					} else if (type.equals(Constants.REAL)) {
-						double valueToPut = jsonObject.getDouble(key);
-						contentValues.put(key, valueToPut);
-						Log.d("test", key + " " + valueToPut);
-					} else if (type.equals(Constants.TEXT)) {
-						String valueToPut = jsonObject.getString(key);
-						contentValues.put(key, valueToPut);
-						Log.d("test", key + " " + valueToPut);
-					}
-
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}
-
-		return contentValues;
+	/**
+	 * Get the current date.
+	 * 
+	 * @return now!
+	 */
+	public static String getData() {
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE,
+		        Locale.ITALIAN);
+		return sdf.format(new Date());
 	}
-
-	public static String getInitialQuery(ITables tables, int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

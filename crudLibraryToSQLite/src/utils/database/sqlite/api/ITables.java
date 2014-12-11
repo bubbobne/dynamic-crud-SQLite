@@ -1,4 +1,4 @@
-package utils.database.sqlite;
+package utils.database.sqlite.api;
 
 /*
  * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
@@ -20,12 +20,12 @@ public interface ITables {
 
 	Class<? extends Activity> getActivity(Enum<?> e);
 
-	String[] getNames();
-
-	String getInitialQuery(Enum tb);
+	String getName();
 
 	Enum getEnum();
 
-	AFieldData getData(Cursor popSpin);
+	IColumns[] getColumns();
+
+	IFieldData createData(ITables tab, Cursor cursor);
 
 }

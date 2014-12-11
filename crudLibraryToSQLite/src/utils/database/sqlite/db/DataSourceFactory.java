@@ -1,4 +1,4 @@
-package utils.database.sqlite;
+package utils.database.sqlite.db;
 
 /*
  * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import utils.database.sqlite.api.IFieldData;
+import utils.database.sqlite.api.ITables;
+import utils.database.sqlite.data.ATables;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -45,7 +48,7 @@ public class DataSourceFactory {
 	 * @return the instance for the CRUD operation.
 	 */
 	public static synchronized DataSourceFactory getInstance(Context context,
-	        int dbVersion, String dbName, ITables tables) {
+	        int dbVersion, String dbName, Class<? extends ITables> tables) {
 		if (instance == null) {
 			instance = new DataSourceFactory(context, dbVersion, dbName, tables);
 		}
@@ -53,24 +56,24 @@ public class DataSourceFactory {
 	}
 
 	private DataSourceFactory(Context context, int dbVersion, String dbName,
-	        ITables tables) {
+	        Class<? extends ITables> tables) {
 		dbHelper = new DbHelper(context, dbVersion, dbName, tables);
 	}
 
-	public ArrayList<AFieldData> getAllRows(String table,
+	public ArrayList<IFieldData> getAllRows(ITables table,
 	        String whereCondition, String[] columns) {
-		final ArrayList<AFieldData> data = new ArrayList<AFieldData>();
+		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
 		;
 		r.lock();
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
+		ATables tabs = dbHelper.tables;
 		try {
 
-			Cursor popSpin = database.query(table, columns, whereCondition,
-			        null, null, null, null);
+			Cursor popSpin = database.query(table.getName(), columns,
+			        whereCondition, null, null, null, null);
 			popSpin.moveToFirst();
 			while (popSpin.isAfterLast() == false) {
-
-				data.add(dbHelper.getTables().getData(popSpin));
+				data.add(tabs.getData(table, popSpin));
 				popSpin.moveToNext();
 			}
 		} finally {
@@ -89,7 +92,7 @@ public class DataSourceFactory {
 	 *            the value to insert.
 	 * @return the number of new row or -1 if it doesn't work correctly.
 	 */
-	public long addRowToTable(AFieldData data) {
+	public long addRowToTable(IFieldData data) {
 		String table = data.getTable();
 		ContentValues content = data.toContentValue();
 		long y = addRowToTable(table, content);
@@ -98,11 +101,25 @@ public class DataSourceFactory {
 
 	public long addRowToTable(String table, ContentValues cv) {
 		w.lock();
+		long y = -1;
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
 		database = dbHelper.getWritableDatabase();
-		long y = database.insert(table, null, cv);
-		database.close();
+		try {
+			y = database.insert(table, null, cv);
+		} finally {
+			closeDb(database);
+			w.unlock();
+		}
 		return y;
+	}
+
+	public long updateRowToTable(IFieldData data, String whereCl) {
+
+		String table = data.getTable();
+		ContentValues content = data.toContentValue();
+		long y = updateRowToTable(table, content, whereCl);
+		return y;
+
 	}
 
 	public long updateRowToTable(String table, ContentValues cv,
@@ -127,9 +144,8 @@ public class DataSourceFactory {
 			String[] tableNames = dbHelper.getTables().getNames();
 			int l = tableNames.length;
 			for (int i = 0; i < l; i++) {
-				if (dbHelper.getTables().getColumns(i) != null) {
-					database.delete(tableNames[i], null, null);
-				}
+				database.delete(tableNames[i], null, null);
+
 			}
 		} finally {
 			w.unlock();
