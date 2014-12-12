@@ -28,4 +28,6 @@ public interface ITables {
 
 	IFieldData createData(ITables tab, Cursor cursor);
 
+	IGroup getIGroup();
+
 }

@@ -10,4 +10,10 @@ public interface IFieldData {
 
 	void cleanValue();
 
+	String getDescription();
+
+	int getId();
+
+	int getPlaceId();
+
 }

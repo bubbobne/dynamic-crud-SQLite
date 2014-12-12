@@ -21,6 +21,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 	private final static String DROP = "DROP TABLE IF EXISTS ";
 	private static final CursorFactory DB_FACTORY = null;
+	public final static String TABLE_KEY = "tableKey";
+
 	ATables tables;
 
 	public ATables getTables() {

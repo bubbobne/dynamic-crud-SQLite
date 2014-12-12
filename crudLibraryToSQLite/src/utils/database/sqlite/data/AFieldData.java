@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Set;
 
-import utils.database.sqlite.Constants;
+import utils.database.sqlite.ConstantsDB;
 import utils.database.sqlite.Utils;
 import utils.database.sqlite.api.IColumns;
 import utils.database.sqlite.api.IFieldData;
@@ -36,18 +36,18 @@ public abstract class AFieldData implements IFieldData {
 		IColumns[] values = t.getColumns();
 		for (IColumns c : values) {
 			String name = ((Enum) c).name();
-			if (c.getType().equals(Constants.INTEGER)) {
+			if (c.getType().equals(ConstantsDB.INTEGER)) {
 				if (!name.equals("STATO")) {
 					integerValue.put(c, 0);
 				} else {
-					integerValue.put(c, Constants.STATO_NEW);
+					integerValue.put(c, ConstantsDB.STATO_NEW);
 				}
-			} else if (c.getType().equals(Constants.TEXT)) {
+			} else if (c.getType().equals(ConstantsDB.TEXT)) {
 				stringValue.put(c, null);
 			}
 
-			else if (c.getType().equals(Constants.REAL)) {
-				doubleValue.put(c, (double) Constants.STATO_NEW);
+			else if (c.getType().equals(ConstantsDB.REAL)) {
+				doubleValue.put(c, (double) ConstantsDB.STATO_NEW);
 			}
 		}
 
@@ -58,19 +58,19 @@ public abstract class AFieldData implements IFieldData {
 		IColumns[] values = t.getColumns();
 		for (IColumns c : values) {
 			String name = ((Enum) c).name();
-			if (c.getType().equals(Constants.INTEGER)) {
+			if (c.getType().equals(ConstantsDB.INTEGER)) {
 				if (!name.equals("STATO")) {
 					integerValue.put(c, 0);
 				} else {
 					integerValue.put(c,
 					        cursor.getInt(cursor.getColumnIndex(name)));
 				}
-			} else if (c.getType().equals(Constants.TEXT)) {
+			} else if (c.getType().equals(ConstantsDB.TEXT)) {
 				stringValue.put(c,
 				        cursor.getString(cursor.getColumnIndex(name)));
 			}
 
-			else if (c.getType().equals(Constants.REAL)) {
+			else if (c.getType().equals(ConstantsDB.REAL)) {
 				doubleValue.put(c,
 				        cursor.getDouble(cursor.getColumnIndex(name)));
 			}
@@ -82,7 +82,7 @@ public abstract class AFieldData implements IFieldData {
 		if (integerValue.containsKey(key)) {
 			return integerValue.get(key);
 		} else {
-			return Constants.STATO_NEW;
+			return ConstantsDB.STATO_NEW;
 		}
 
 	}
@@ -91,7 +91,7 @@ public abstract class AFieldData implements IFieldData {
 		if (doubleValue.containsKey(key)) {
 			return doubleValue.get(key);
 		} else {
-			return Constants.STATO_NEW;
+			return ConstantsDB.STATO_NEW;
 		}
 
 	}
@@ -162,7 +162,7 @@ public abstract class AFieldData implements IFieldData {
 
 	// TODO Auto-generated method stub
 	public int addIntValue(IColumns key) {
-		int j = Constants.NO_DATO;
+		int j = ConstantsDB.NO_DATO;
 		if (integerValue.containsKey(key)) {
 			j = integerValue.get(key) + 1;
 			integerValue.put(key, j);
@@ -172,7 +172,7 @@ public abstract class AFieldData implements IFieldData {
 	}
 
 	public int minusIntValue(IColumns key) {
-		int j = Constants.NO_DATO;
+		int j = ConstantsDB.NO_DATO;
 		if (integerValue.containsKey(key)) {
 			j = integerValue.get(key) - 1;
 			integerValue.put(key, j);
