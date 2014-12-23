@@ -163,4 +163,9 @@ public class DataSourceFactory {
 		}
 
 	}
+
+	public void clearTable(ITables[] tables, IFieldData ifieldata) {
+
+	}
+
 }

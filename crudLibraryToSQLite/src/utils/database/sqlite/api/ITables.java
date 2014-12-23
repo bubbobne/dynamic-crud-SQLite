@@ -18,7 +18,7 @@ public interface ITables {
 
 	IColumns getColumns(String tableName);
 
-	Class<? extends Activity> getActivity(Enum<?> e);
+	Class<? extends Activity> getActivity();
 
 	String getName();
 
@@ -29,5 +29,7 @@ public interface ITables {
 	IFieldData createData(ITables tab, Cursor cursor);
 
 	IGroup getIGroup();
+
+	ITables[] getListNames(IGroup group);
 
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import utils.database.sqlite.ConstantsDB;
-import utils.database.sqlite.Utils;
+import utils.database.sqlite.UtilsDB;
 import utils.database.sqlite.api.IColumns;
 import utils.database.sqlite.api.IFieldData;
 import utils.database.sqlite.api.ITables;
@@ -142,7 +142,7 @@ public abstract class AFieldData implements IFieldData {
 			if (stringValue.containsKey(n)) {
 				String nome = ((Enum) n).name();
 				if (nome.equals("DATA_RILIEVO")) {
-					cv.put(n.toString(), Utils.getData());
+					cv.put(n.toString(), UtilsDB.getData());
 				} else if (t != null) {
 					cv.put(n.toString(), t);
 				}

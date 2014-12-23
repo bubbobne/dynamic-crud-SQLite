@@ -19,7 +19,7 @@ import java.util.Locale;
  * 
  * @version 2.0 26/lug/2014
  */
-public class Utils {
+public class UtilsDB {
 
 	/**
 	 * Get an array of names.

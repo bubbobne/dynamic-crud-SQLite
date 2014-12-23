@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import utils.database.sqlite.api.IColumns;
 import utils.database.sqlite.api.IFieldData;
+import utils.database.sqlite.api.IGroup;
 import utils.database.sqlite.api.ITables;
 import android.database.Cursor;
 
@@ -63,6 +64,32 @@ public class ATables {
 			names[i] = tabs[i].getName();
 		}
 		return names;
+	}
+
+	public String[] getNames(IGroup group) {
+		ITables[] tabs = tabelle.getEnumConstants();
+		ArrayList<String> array = new ArrayList<String>();
+		for (int i = 0; i < tabs.length; i++) {
+
+			if (tabs[i].getIGroup().equals(group)) {
+				array.add(tabs[i].getName());
+			}
+		}
+
+		return array.toArray(new String[array.size()]);
+	}
+
+	public ArrayList<ITables> getTables(IGroup group) {
+		ITables[] tabs = tabelle.getEnumConstants();
+		ArrayList<ITables> array = new ArrayList<ITables>();
+		for (int i = 0; i < tabs.length; i++) {
+
+			if (tabs[i].getIGroup().equals(group)) {
+				array.add(tabs[i]);
+			}
+		}
+
+		return array;
 	}
 
 	public IFieldData getData(ITables table, Cursor popSpin) {

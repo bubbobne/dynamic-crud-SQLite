@@ -6,4 +6,6 @@ public interface IGroup {
 
 	int getId();
 
+	int getId(String name);
+
 }

@@ -16,4 +16,6 @@ public interface IFieldData {
 
 	int getPlaceId();
 
+	int getColor();
+
 }
