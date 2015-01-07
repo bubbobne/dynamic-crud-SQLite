@@ -83,6 +83,31 @@ public class DataSourceFactory {
 		return data;
 	}
 
+	
+	
+	
+	public IFieldData getRow(ITables table,
+	        String whereCondition) {
+		r.lock();
+		SQLiteDatabase database = dbHelper.getReadableDatabase();
+		ATables tabs = dbHelper.tables;
+		try {
+
+			Cursor popSpin = database.query(table.getName(), null,
+			        whereCondition, null, null, null, null);
+			popSpin.moveToFirst();
+			while (popSpin.isAfterLast() == false) {
+				return tabs.getData(table, popSpin);
+			}
+		} finally {
+			closeDb(database);
+			r.unlock();
+		}
+		return null;
+
+	}
+	
+	
 	/**
 	 * Add a row to the table in the database.
 	 * 
