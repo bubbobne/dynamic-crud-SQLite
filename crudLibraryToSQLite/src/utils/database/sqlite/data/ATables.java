@@ -71,7 +71,8 @@ public class ATables {
 		ArrayList<String> array = new ArrayList<String>();
 		for (int i = 0; i < tabs.length; i++) {
 
-			if (tabs[i].getIGroup().equals(group)) {
+			if (tabs[i].getIGroup() != null
+			        && tabs[i].getIGroup().isInstance(group)) {
 				array.add(tabs[i].getName());
 			}
 		}
@@ -84,7 +85,8 @@ public class ATables {
 		ArrayList<ITables> array = new ArrayList<ITables>();
 		for (int i = 0; i < tabs.length; i++) {
 
-			if (tabs[i].getIGroup().equals(group)) {
+			if (tabs[i].getIGroup() != null
+			        && tabs[i].getIGroup().isInstance(group)) {
 				array.add(tabs[i]);
 			}
 		}

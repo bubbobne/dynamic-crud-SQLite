@@ -8,4 +8,6 @@ public interface IGroup {
 
 	int getId(String name);
 
+	String getWhereClause();
+
 }
