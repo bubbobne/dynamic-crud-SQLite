@@ -56,26 +56,27 @@ public abstract class AFieldData implements IFieldData {
 	public AFieldData(ITables t, Cursor cursor) {
 		this.tab = t;
 		IColumns[] values = t.getColumns();
-		for (IColumns c : values) {
-			String name = ((Enum) c).name();
-			if (c.getType().equals(ConstantsDB.INTEGER)) {
-				if (!name.equals("STATO")) {
-					integerValue.put(c, 0);
-				} else {
-					integerValue.put(c,
-					        cursor.getInt(cursor.getColumnIndex(name)));
+		if (cursor != null) {
+			for (IColumns c : values) {
+				String name = ((Enum) c).name();
+				if (c.getType().equals(ConstantsDB.INTEGER)) {
+					if (!name.equals("STATO")) {
+						integerValue.put(c, 0);
+					} else {
+						integerValue.put(c,
+						        cursor.getInt(cursor.getColumnIndex(name)));
+					}
+				} else if (c.getType().equals(ConstantsDB.TEXT)) {
+					stringValue.put(c,
+					        cursor.getString(cursor.getColumnIndex(name)));
 				}
-			} else if (c.getType().equals(ConstantsDB.TEXT)) {
-				stringValue.put(c,
-				        cursor.getString(cursor.getColumnIndex(name)));
-			}
 
-			else if (c.getType().equals(ConstantsDB.REAL)) {
-				doubleValue.put(c,
-				        cursor.getDouble(cursor.getColumnIndex(name)));
+				else if (c.getType().equals(ConstantsDB.REAL)) {
+					doubleValue.put(c,
+					        cursor.getDouble(cursor.getColumnIndex(name)));
+				}
 			}
 		}
-
 	}
 
 	public int getIntValue(IColumns key) {
@@ -205,4 +206,13 @@ public abstract class AFieldData implements IFieldData {
 		return false;
 
 	}
+
+	public double sumValue(IColumns key, double valueToAdd) {
+		if (doubleValue.containsKey(key)) {
+			double v = doubleValue.get(key) + valueToAdd;
+			doubleValue.put(key, v);
+		}
+		return doubleValue.get(key);
+	}
+
 }

@@ -55,6 +55,11 @@ public class DataSourceFactory {
 		return instance;
 	}
 
+	public DbHelper getDbHelper() {
+
+		return dbHelper;
+	}
+
 	private DataSourceFactory(Context context, int dbVersion, String dbName,
 	        Class<? extends ITables> tables) {
 		dbHelper = new DbHelper(context, dbVersion, dbName, tables);
@@ -83,11 +88,7 @@ public class DataSourceFactory {
 		return data;
 	}
 
-	
-	
-	
-	public IFieldData getRow(ITables table,
-	        String whereCondition) {
+	public IFieldData getRow(ITables table, String whereCondition) {
 		r.lock();
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
 		ATables tabs = dbHelper.tables;
@@ -106,8 +107,7 @@ public class DataSourceFactory {
 		return null;
 
 	}
-	
-	
+
 	/**
 	 * Add a row to the table in the database.
 	 * 

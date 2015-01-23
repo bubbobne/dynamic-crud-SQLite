@@ -97,4 +97,15 @@ public class ATables {
 	public IFieldData getData(ITables table, Cursor popSpin) {
 		return table.createData(table, popSpin);
 	}
+
+	public ITables getTable(String name) {
+		ITables[] tables = tabelle.getEnumConstants();
+		for (ITables t : tables) {
+			if (t.getName().equals(name)) {
+				return t;
+			}
+		}
+		return null;
+	}
+
 }
