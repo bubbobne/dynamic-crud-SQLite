@@ -47,7 +47,7 @@ public abstract class AFieldData implements IFieldData {
 			}
 
 			else if (c.getType().equals(ConstantsDB.REAL)) {
-				doubleValue.put(c, (double) ConstantsDB.STATO_NEW);
+				doubleValue.put(c, 0.0);
 			}
 		}
 
