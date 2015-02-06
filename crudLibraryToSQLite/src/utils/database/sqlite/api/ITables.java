@@ -26,7 +26,7 @@ public interface ITables {
 
 	IColumns[] getColumns();
 
-	IFieldData createData(ITables tab, Cursor cursor);
+	IFieldData createData(ITables tab, Cursor cursor, IGroup group);
 
 	Class<? extends IGroup> getIGroup();
 

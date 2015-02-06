@@ -43,8 +43,7 @@ public class UtilsDB {
 	 * @return now!
 	 */
 	public static String getData() {
-		SimpleDateFormat sdf = new SimpleDateFormat(ConstantsDB.DATE,
-		        Locale.ITALIAN);
+		SimpleDateFormat sdf = new SimpleDateFormat(ConstantsDB.DATE, Locale.US);
 		return sdf.format(new Date());
 	}
 }

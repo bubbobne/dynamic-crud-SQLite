@@ -94,8 +94,8 @@ public class ATables {
 		return array;
 	}
 
-	public IFieldData getData(ITables table, Cursor popSpin) {
-		return table.createData(table, popSpin);
+	public IFieldData getData(ITables table, Cursor popSpin, IGroup group) {
+		return table.createData(table, popSpin, group);
 	}
 
 	public ITables getTable(String name) {

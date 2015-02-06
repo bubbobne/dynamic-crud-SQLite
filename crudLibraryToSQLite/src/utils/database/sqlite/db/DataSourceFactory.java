@@ -9,6 +9,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import utils.database.sqlite.api.IFieldData;
+import utils.database.sqlite.api.IGroup;
 import utils.database.sqlite.api.ITables;
 import utils.database.sqlite.data.ATables;
 import android.content.ContentValues;
@@ -66,7 +67,7 @@ public class DataSourceFactory {
 	}
 
 	public ArrayList<IFieldData> getAllRows(ITables table,
-	        String whereCondition, String[] columns) {
+	        String whereCondition, String[] columns, IGroup group) {
 		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
 		;
 		r.lock();
@@ -78,7 +79,7 @@ public class DataSourceFactory {
 			        whereCondition, null, null, null, null);
 			popSpin.moveToFirst();
 			while (popSpin.isAfterLast() == false) {
-				data.add(tabs.getData(table, popSpin));
+				data.add(tabs.getData(table, popSpin, group));
 				popSpin.moveToNext();
 			}
 		} finally {
@@ -88,23 +89,47 @@ public class DataSourceFactory {
 		return data;
 	}
 
-	public IFieldData getRow(ITables table, String whereCondition) {
+	public IFieldData getRow(ITables table, String whereCondition,
+	        IGroup group, String order) {
 		r.lock();
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
 		ATables tabs = dbHelper.tables;
 		try {
 
 			Cursor popSpin = database.query(table.getName(), null,
-			        whereCondition, null, null, null, null);
+			        whereCondition, null, null, null, order, "1");
 			popSpin.moveToFirst();
 			while (popSpin.isAfterLast() == false) {
-				return tabs.getData(table, popSpin);
+				return tabs.getData(table, popSpin, group);
 			}
 		} finally {
 			closeDb(database);
 			r.unlock();
 		}
 		return null;
+
+	}
+
+	public int getIntValue(ITables table, String whereCondition,
+	        String[] columns) {
+		if (columns != null && columns.length > 0) {
+			r.lock();
+			SQLiteDatabase database = dbHelper.getReadableDatabase();
+			ATables tabs = dbHelper.tables;
+			try {
+
+				Cursor popSpin = database.query(table.getName(), columns,
+				        whereCondition, null, null, null, null);
+				popSpin.moveToFirst();
+				while (popSpin.isAfterLast() == false) {
+					return popSpin.getInt(popSpin.getColumnIndex(columns[0]));
+				}
+			} finally {
+				closeDb(database);
+				r.unlock();
+			}
+		}
+		return 0;
 
 	}
 
@@ -130,7 +155,7 @@ public class DataSourceFactory {
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
 		database = dbHelper.getWritableDatabase();
 		try {
-			y = database.insert(table, null, cv);
+			y = database.replace(table, null, cv);
 		} finally {
 			closeDb(database);
 			w.unlock();

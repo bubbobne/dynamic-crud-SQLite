@@ -32,8 +32,19 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	public AFieldData(Class<? extends IColumns> c, ITables t) {
+		this.tab = t;
+		IColumns[] value = c.getEnumConstants();
+		init(value);
+
+	}
+
 	private void init(ITables t) {
 		IColumns[] values = t.getColumns();
+		init(values);
+	}
+
+	private void init(IColumns[] values) {
 		for (IColumns c : values) {
 			String name = ((Enum) c).name();
 			if (c.getType().equals(ConstantsDB.INTEGER)) {
@@ -50,7 +61,6 @@ public abstract class AFieldData implements IFieldData {
 				doubleValue.put(c, 0.0);
 			}
 		}
-
 	}
 
 	public AFieldData(ITables t, Cursor cursor) {
@@ -60,12 +70,10 @@ public abstract class AFieldData implements IFieldData {
 			for (IColumns c : values) {
 				String name = ((Enum) c).name();
 				if (c.getType().equals(ConstantsDB.INTEGER)) {
-					if (!name.equals("STATO")) {
-						integerValue.put(c, 0);
-					} else {
-						integerValue.put(c,
-						        cursor.getInt(cursor.getColumnIndex(name)));
-					}
+
+					integerValue.put(c,
+					        cursor.getInt(cursor.getColumnIndex(name)));
+
 				} else if (c.getType().equals(ConstantsDB.TEXT)) {
 					stringValue.put(c,
 					        cursor.getString(cursor.getColumnIndex(name)));
