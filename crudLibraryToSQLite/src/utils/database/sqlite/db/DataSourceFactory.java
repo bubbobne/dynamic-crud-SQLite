@@ -109,7 +109,30 @@ public class DataSourceFactory {
 		return null;
 
 	}
+	public IFieldData[] getRows(ITables table, String whereCondition,
+	        IGroup group, String order,int limit) {
+		r.lock();
+		IFieldData [] data = new IFieldData[limit];
+		SQLiteDatabase database = dbHelper.getReadableDatabase();
+		ATables tabs = dbHelper.tables;
+		try {
 
+			Cursor popSpin = database.query(table.getName(), null,
+			        whereCondition, null, null, null, order, String.valueOf(limit));
+			popSpin.moveToFirst();
+			int i=0;
+			while (popSpin.isAfterLast() == false) {
+				 data[i]=tabs.getData(table, popSpin, group);
+				 i++;
+				 
+			}
+			return data;
+		} finally {
+			closeDb(database);
+			r.unlock();
+		}
+
+	}
 	public int getIntValue(ITables table, String whereCondition,
 	        String[] columns) {
 		if (columns != null && columns.length > 0) {
