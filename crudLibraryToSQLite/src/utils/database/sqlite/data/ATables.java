@@ -95,7 +95,7 @@ public class ATables {
 	}
 
 	public IFieldData getData(ITables table, Cursor popSpin, IGroup group) {
-		return table.createData(table, popSpin, group);
+		return table.createData(table, popSpin);
 	}
 
 	public ITables getTable(String name) {
@@ -108,4 +108,20 @@ public class ATables {
 		return null;
 	}
 
+	public ITables[] getTables(ITables[] exclude) {
+		ITables[] tabs = tabelle.getEnumConstants();
+		ArrayList<ITables> array = new ArrayList<ITables>();
+		for (int i = 0; i < tabs.length; i++) {
+			boolean isOk = true;
+			for (int k = 0; k < exclude.length; k++) {
+				if (tabs[i].getName().equals(exclude[k].getName())) {
+					isOk = false;
+				}
+				if (isOk) {
+					array.add(tabs[i]);
+				}
+			}
+		}
+		return array.toArray(new ITables[array.size()]);
+	}
 }

@@ -71,6 +71,11 @@ public class DataSourceFactory {
 		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
 		;
 		r.lock();
+
+		if (group != null) {
+			whereCondition = whereCondition + " AND " + group.getWhereClause();
+		}
+
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
 		ATables tabs = dbHelper.tables;
 		try {
@@ -109,22 +114,26 @@ public class DataSourceFactory {
 		return null;
 
 	}
+
 	public IFieldData[] getRows(ITables table, String whereCondition,
-	        IGroup group, String order,int limit) {
+	        IGroup group, String order, int limit) {
 		r.lock();
-		IFieldData [] data = new IFieldData[limit];
+		IFieldData[] data = new IFieldData[limit];
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
 		ATables tabs = dbHelper.tables;
 		try {
 
 			Cursor popSpin = database.query(table.getName(), null,
-			        whereCondition, null, null, null, order, String.valueOf(limit));
+			        whereCondition, null, null, null, order,
+			        String.valueOf(limit));
 			popSpin.moveToFirst();
-			int i=0;
+			int i = 0;
 			while (popSpin.isAfterLast() == false) {
-				 data[i]=tabs.getData(table, popSpin, group);
-				 i++;
-				 
+				data[i] = tabs.getData(table, popSpin, group);
+				popSpin.moveToNext();
+
+				i++;
+
 			}
 			return data;
 		} finally {
@@ -133,6 +142,7 @@ public class DataSourceFactory {
 		}
 
 	}
+
 	public int getIntValue(ITables table, String whereCondition,
 	        String[] columns) {
 		if (columns != null && columns.length > 0) {
@@ -210,6 +220,20 @@ public class DataSourceFactory {
 		return y;
 	}
 
+	public long updateRowToTable(String query) {
+		w.lock();
+		long y = -1;
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		try {
+			database.rawQuery(query, null);
+			database.close();
+		} finally {
+			closeDb(database);
+			w.unlock();
+		}
+		return y;
+	}
+
 	public void removeAllTable() {
 		w.lock();
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -225,6 +249,25 @@ public class DataSourceFactory {
 			closeDb(database);
 		}
 
+	}
+
+	/**
+	 * Remove
+	 * 
+	 * @param table
+	 */
+	public void removeTable(String table) {
+
+		w.lock();
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		try {
+			if (table != null) {
+				database.delete(table, null, null);
+			}
+		} finally {
+			closeDb(database);
+			w.unlock();
+		}
 	}
 
 	/*

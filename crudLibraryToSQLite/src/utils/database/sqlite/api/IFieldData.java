@@ -1,5 +1,9 @@
 package utils.database.sqlite.api;
 
+import java.util.List;
+
+import org.apache.http.message.BasicNameValuePair;
+
 import android.content.ContentValues;
 
 public interface IFieldData {
@@ -18,4 +22,9 @@ public interface IFieldData {
 
 	int getColor();
 
+	List<BasicNameValuePair> toList();
+
+	ContentValues getContentValueToUpdate(String value);
+
+	String getWhereToUpdate();
 }

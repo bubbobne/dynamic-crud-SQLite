@@ -1,8 +1,12 @@
 package utils.database.sqlite.data;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+
+import org.apache.http.message.BasicNameValuePair;
 
 import utils.database.sqlite.ConstantsDB;
 import utils.database.sqlite.UtilsDB;
@@ -221,6 +225,36 @@ public abstract class AFieldData implements IFieldData {
 			doubleValue.put(key, v);
 		}
 		return doubleValue.get(key);
+	}
+
+	@Override
+	public List<BasicNameValuePair> toList() {
+		// TODO Auto-generated method stub
+
+		List<BasicNameValuePair> listParam = new ArrayList<BasicNameValuePair>(
+		        2);
+		listParam.add(new BasicNameValuePair("TABELLA", tab.getName()));
+
+		IColumns[] keys = tab.getColumns();
+
+		for (int i = 0; i < keys.length; i++) {
+			IColumns key = keys[i];
+			String type = key.getType();
+			if (type.equals(ConstantsDB.INTEGER)) {
+				listParam.add(new BasicNameValuePair(key.getName(), String
+				        .valueOf(getIntValue(key))));
+			} else if (type.equals(ConstantsDB.REAL)) {
+				listParam.add(new BasicNameValuePair(key.getName(), String
+				        .valueOf(getDoubleValue(key))));
+
+			} else if (type.equals(ConstantsDB.TEXT)) {
+				listParam.add(new BasicNameValuePair(key.getName(),
+				        getStringValue(key)));
+
+			}
+		}
+
+		return listParam;
 	}
 
 }

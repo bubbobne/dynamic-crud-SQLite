@@ -4,6 +4,8 @@ package utils.database.sqlite.api;
  * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
  * Version 3.
  */
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.database.Cursor;
 
@@ -26,10 +28,19 @@ public interface ITables {
 
 	IColumns[] getColumns();
 
-	IFieldData createData(ITables tab, Cursor cursor, IGroup group);
+	IFieldData createData(ITables tab, Cursor cursor);
 
 	Class<? extends IGroup> getIGroup();
 
 	ITables[] getListNames(IGroup group);
 
+	String getWhere(JSONObject jO);
+
+	String getWhereUnregister();
+
+	boolean isParent();
+
+	ITables[] getChilds();
+
+	String colToUpdate(String value, IFieldData d);
 }
