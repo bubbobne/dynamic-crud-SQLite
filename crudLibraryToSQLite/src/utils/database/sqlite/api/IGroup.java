@@ -10,4 +10,5 @@ public interface IGroup {
 
 	String getWhereClause();
 
+	float getIcon();
 }
