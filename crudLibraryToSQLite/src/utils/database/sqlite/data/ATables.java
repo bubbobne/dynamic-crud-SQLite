@@ -7,6 +7,7 @@ import utils.database.sqlite.api.IFieldData;
 import utils.database.sqlite.api.IGroup;
 import utils.database.sqlite.api.ITables;
 import android.database.Cursor;
+import android.util.Log;
 
 public class ATables {
 	private static final String CREATE = "CREATE TABLE ";
@@ -28,6 +29,7 @@ public class ATables {
 			StringBuilder sb = new StringBuilder(CREATE + tab.getName() + " (");
 			String primary = " primary key(";
 			ArrayList<String> primaryName = new ArrayList<String>();
+
 			IColumns[] col = tab.getColumns();
 			int l2 = col.length;
 			for (int j = 0; j < l2 - 1; j++) {
@@ -37,22 +39,26 @@ public class ATables {
 					primaryName.add(c.getName());
 				}
 			}
+			Log.d("create tab", primaryName.toString());
 			IColumns c = col[l2 - 1];
+			if (c.isPrimary()) {
+				primaryName.add(c.getName());
+			}
 			sb.append(c.getName() + " " + c.getType());
+
 			if (primaryName.size() > 0) {
 				sb.append(COMMA);
 				sb.append(primary);
 				sb.append(primaryName.get(0));
 				for (int k = 1; k < primaryName.size(); k++) {
 					sb.append(COMMA + primaryName.get(k));
-
 				}
 
 				sb.append(")");
 			}
 			sb.append(")");
 			queries[i] = sb.toString();
-
+			Log.d("create tab", queries[i]);
 		}
 		return queries;
 	}
