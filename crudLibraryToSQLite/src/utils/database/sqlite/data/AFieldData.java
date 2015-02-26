@@ -15,7 +15,6 @@ import utils.database.sqlite.api.IFieldData;
 import utils.database.sqlite.api.ITables;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 /**
  * The data to store in db.
@@ -230,9 +229,6 @@ public abstract class AFieldData implements IFieldData {
 
 	@Override
 	public List<BasicNameValuePair> toList() {
-		// TODO Auto-generated method stub
-
-		Log.d("TO LIST", tab.getName());
 		List<BasicNameValuePair> listParam = new ArrayList<BasicNameValuePair>(
 		        2);
 		listParam.add(new BasicNameValuePair("TABELLA", tab.getName()));
@@ -242,8 +238,6 @@ public abstract class AFieldData implements IFieldData {
 		for (int i = 0; i < keys.length; i++) {
 			IColumns key = keys[i];
 			String type = key.getType();
-			Log.d("TO LIST", key.getName());
-
 			if (type.equals(ConstantsDB.INTEGER)) {
 				listParam.add(new BasicNameValuePair(key.getName(), String
 				        .valueOf(getIntValue(key))));

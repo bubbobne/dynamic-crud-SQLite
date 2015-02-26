@@ -7,7 +7,6 @@ import utils.database.sqlite.api.IFieldData;
 import utils.database.sqlite.api.IGroup;
 import utils.database.sqlite.api.ITables;
 import android.database.Cursor;
-import android.util.Log;
 
 public class ATables {
 	private static final String CREATE = "CREATE TABLE ";
@@ -39,7 +38,6 @@ public class ATables {
 					primaryName.add(c.getName());
 				}
 			}
-			Log.d("create tab", primaryName.toString());
 			IColumns c = col[l2 - 1];
 			if (c.isPrimary()) {
 				primaryName.add(c.getName());
@@ -58,7 +56,6 @@ public class ATables {
 			}
 			sb.append(")");
 			queries[i] = sb.toString();
-			Log.d("create tab", queries[i]);
 		}
 		return queries;
 	}
@@ -116,6 +113,8 @@ public class ATables {
 
 	public ITables[] getTables(ITables[] exclude) {
 		ITables[] tabs = tabelle.getEnumConstants();
+		if (exclude == null || exclude.length == 0)
+			return tabs;
 		ArrayList<ITables> array = new ArrayList<ITables>();
 		for (int i = 0; i < tabs.length; i++) {
 			boolean isOk = true;

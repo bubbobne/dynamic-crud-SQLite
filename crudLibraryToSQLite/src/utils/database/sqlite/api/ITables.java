@@ -7,6 +7,7 @@ package utils.database.sqlite.api;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
@@ -42,5 +43,5 @@ public interface ITables {
 
 	ITables[] getChilds();
 
-	String colToUpdate(String value, IFieldData d);
+	ContentValues colToUpdate(String value, IFieldData d);
 }
