@@ -220,20 +220,6 @@ public class DataSourceFactory {
 		return y;
 	}
 
-	public long updateRowToTable(String query) {
-		w.lock();
-		long y = -1;
-		SQLiteDatabase database = dbHelper.getWritableDatabase();
-		try {
-			database.rawQuery(query, null);
-			database.close();
-		} finally {
-			closeDb(database);
-			w.unlock();
-		}
-		return y;
-	}
-
 	public void removeAllTable() {
 		w.lock();
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
