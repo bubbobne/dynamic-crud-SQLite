@@ -266,7 +266,18 @@ public class DataSourceFactory {
 
 	}
 
-	public void clearTable(ITables[] tables, IFieldData ifieldata) {
+	public void clearValueToTable(ITables table, IFieldData ifieldata) {
+		w.lock();
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		try {
+			if (table != null) {
+				database.delete(table.getName(), ifieldata.getWhereToUpdate(),
+				        null);
+			}
+		} finally {
+			closeDb(database);
+			w.unlock();
+		}
 
 	}
 

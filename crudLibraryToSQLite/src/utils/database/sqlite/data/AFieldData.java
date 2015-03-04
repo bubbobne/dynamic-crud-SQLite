@@ -29,6 +29,19 @@ public abstract class AFieldData implements IFieldData {
 	protected HashMap<IColumns, Double> doubleValue = new HashMap<IColumns, Double>();
 	protected HashMap<IColumns, String> stringValue = new HashMap<IColumns, String>();
 	protected static DecimalFormat decimalFormat = new DecimalFormat("##.##");
+	boolean register = false;
+
+	@Override
+	public boolean isRegistered() {
+
+		return register;
+	}
+
+	@Override
+	public void setRegistered(boolean reg) {
+		this.register = reg;
+
+	};
 
 	public AFieldData(ITables t) {
 		this.tab = t;

@@ -27,4 +27,11 @@ public interface IFieldData {
 	ContentValues getContentValueToUpdate(String value);
 
 	String getWhereToUpdate();
+
+	String getData();
+
+	boolean isRegistered();
+
+	void setRegistered(boolean reg);
+
 }
