@@ -70,7 +70,7 @@ public class DataSourceFactory {
 	        String whereCondition, String[] columns, IGroup group) {
 		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
 		;
-		r.lock();
+		w.lock();
 
 		if (group != null) {
 			whereCondition = whereCondition + " AND " + group.getWhereClause();
@@ -89,7 +89,7 @@ public class DataSourceFactory {
 			}
 		} finally {
 			closeDb(database);
-			r.unlock();
+			w.unlock();
 		}
 		return data;
 	}
