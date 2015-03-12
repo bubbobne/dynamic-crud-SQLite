@@ -69,8 +69,8 @@ public class DataSourceFactory {
 	public ArrayList<IFieldData> getAllRows(ITables table,
 	        String whereCondition, String[] columns, IGroup group) {
 		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
-		;
-		w.lock();
+
+		r.lock();
 
 		if (group != null) {
 			whereCondition = whereCondition + " AND " + group.getWhereClause();
@@ -89,7 +89,7 @@ public class DataSourceFactory {
 			}
 		} finally {
 			closeDb(database);
-			w.unlock();
+			r.unlock();
 		}
 		return data;
 	}
