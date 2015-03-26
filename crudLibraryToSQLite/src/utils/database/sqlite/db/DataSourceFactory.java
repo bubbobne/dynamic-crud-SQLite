@@ -281,4 +281,15 @@ public class DataSourceFactory {
 
 	}
 
+	public String getPath() {
+		String value;
+		SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+		value = database.getPath();
+		closeDb(database);
+
+		return value;
+
+	}
+
 }

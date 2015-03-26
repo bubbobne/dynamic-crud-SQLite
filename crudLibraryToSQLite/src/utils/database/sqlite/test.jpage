@@ -1,0 +1,34 @@
+
+
+public enum FormatData {
+	USA("'%Y-%m-%d'"), ITALY("'%d-%m-%Y'");
+
+	private final String value;
+
+	private FormatData(String value) {
+		this.value = value;
+	}
+
+	public String getDataFormatString() {
+		// TODO Auto-generated method stub
+		return value;
+	}
+}
+	public static String getDataOrder(FormatData fd, String columnsData,
+	        boolean isDesc) {
+		StringBuilder sb = new StringBuilder("strftime(");
+		sb.append(fd.getDataFormatString());
+		sb.append(",");
+		sb.append(columnsData);
+		sb.append(")");
+		if (isDesc) {
+			sb.append(" DESC");
+		}
+
+		return sb.toString();
+	}
+
+
+String tt=getDataOrder(FormatData.USA,"data",true);
+System.out.println(" ss");
+

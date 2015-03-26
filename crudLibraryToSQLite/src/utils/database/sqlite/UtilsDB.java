@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import utils.database.sqlite.data.FormatData;
+
 /*
  *This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
  * Version 3.
@@ -46,4 +48,24 @@ public class UtilsDB {
 		SimpleDateFormat sdf = new SimpleDateFormat(ConstantsDB.DATE, Locale.US);
 		return sdf.format(new Date());
 	}
+
+	/**
+	 * Get a order string.
+	 * 
+	 * @return a string to use as order data.
+	 */
+
+	public static String getDataOrder(FormatData fd, String columnsData,
+	        boolean isDesc) {
+		StringBuilder sb = new StringBuilder("strftime(");
+		sb.append(fd.getDataFormatString());
+		sb.append(",");
+		sb.append(columnsData);
+		sb.append(")");
+		if (isDesc) {
+			sb.append(" DESC");
+		}
+		return sb.toString();
+	}
+
 }
