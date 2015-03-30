@@ -89,7 +89,9 @@ public class ATables {
 		for (int i = 0; i < tabs.length; i++) {
 
 			if (tabs[i].getIGroup() != null
-			        && tabs[i].getIGroup().isInstance(group)) {
+			        && group.isSame(tabs[i].getIGroup()))
+
+			{
 				array.add(tabs[i]);
 			}
 		}

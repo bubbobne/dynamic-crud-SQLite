@@ -11,4 +11,6 @@ public interface IGroup {
 	String getWhereClause();
 
 	float getIcon();
+
+	boolean isSame(Class<? extends IGroup> iGroup);
 }
