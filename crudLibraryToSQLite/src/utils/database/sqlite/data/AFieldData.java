@@ -1,5 +1,8 @@
 package utils.database.sqlite.data;
-
+/*
+ * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
+ * Version 3.
+ */
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +36,6 @@ public abstract class AFieldData implements IFieldData {
 
 	@Override
 	public boolean isRegistered() {
-
 		return register;
 	}
 

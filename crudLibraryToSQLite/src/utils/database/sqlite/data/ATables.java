@@ -1,5 +1,8 @@
 package utils.database.sqlite.data;
-
+/*
+ * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
+ * Version 3.
+ */
 import java.util.ArrayList;
 
 import utils.database.sqlite.api.IColumns;

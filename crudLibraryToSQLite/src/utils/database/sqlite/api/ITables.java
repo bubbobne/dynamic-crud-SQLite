@@ -11,7 +11,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
- * 
+ * An Interface for a table of the SQLite.
  * 
  * @author <a href="mailto:daniele.andreis@gmail.com"> Daniele Andreis </a>.
  * @version 2.0 26/lug/2014

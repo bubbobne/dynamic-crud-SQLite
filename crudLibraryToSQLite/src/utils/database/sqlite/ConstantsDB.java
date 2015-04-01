@@ -1,5 +1,8 @@
 package utils.database.sqlite;
-
+/*
+ * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
+ * Version 3.
+ */
 /**
  * 
  * @author Daniele Andreis.
