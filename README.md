@@ -108,3 +108,13 @@ public class Columns {
 
 
 ```
+
+So next step is create the data object and extract the value from the database:
+
+```java
+IApplication app = ((IApplication) getApplication());
+DataSourceFactory df = app.getDataBase();
+ArrayList<IFieldData> mPlace = df.getAllRows(getTables(), app.getGroup().getWhereClause(),null, getGroup());
+```
+
+Where I have stored the IGroup implementation in the Application.
