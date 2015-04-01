@@ -9,3 +9,10 @@ It's designed to use in a survey, where each table is related to a form (an acti
 
 
 ###Example
+
+
+
+```java
+var s = "JavaScript syntax highlighting";
+alert(s);
+```
