@@ -49,25 +49,40 @@ public class DataSourceFactory {
 	 * @return the instance for the CRUD operation.
 	 */
 	public static synchronized DataSourceFactory getInstance(Context context,
-	        int dbVersion, String dbName, Class<? extends ITables> tables) {
+			int dbVersion, String dbName, Class<? extends ITables> tables) {
 		if (instance == null) {
 			instance = new DataSourceFactory(context, dbVersion, dbName, tables);
 		}
 		return instance;
 	}
 
+	/**
+	 * 
+	 * @return get the DbHelper of this database.
+	 */
 	public DbHelper getDbHelper() {
-
 		return dbHelper;
 	}
 
 	private DataSourceFactory(Context context, int dbVersion, String dbName,
-	        Class<? extends ITables> tables) {
+			Class<? extends ITables> tables) {
 		dbHelper = new DbHelper(context, dbVersion, dbName, tables);
 	}
 
+	/**
+	 * Get Values, stored in a object collections.
+	 * 
+	 * @param table
+	 *            where to extract the value.
+	 * @param whereCondition
+	 * @param columns
+	 *            to extract.
+	 * @param group
+	 *            that belong.
+	 * @return
+	 */
 	public ArrayList<IFieldData> getAllRows(ITables table,
-	        String whereCondition, String[] columns, IGroup group) {
+			String whereCondition, String[] columns, IGroup group) {
 		final ArrayList<IFieldData> data = new ArrayList<IFieldData>();
 
 		r.lock();
@@ -81,7 +96,7 @@ public class DataSourceFactory {
 		try {
 
 			Cursor popSpin = database.query(table.getName(), columns,
-			        whereCondition, null, null, null, null);
+					whereCondition, null, null, null, null);
 			popSpin.moveToFirst();
 			while (popSpin.isAfterLast() == false) {
 				data.add(tabs.getData(table, popSpin, group));
@@ -94,15 +109,24 @@ public class DataSourceFactory {
 		return data;
 	}
 
+	/**
+	 * Get an object that store a single row data.
+	 * 
+	 * @param table
+	 * @param whereCondition
+	 * @param group
+	 * @param order
+	 * @return
+	 */
 	public IFieldData getRow(ITables table, String whereCondition,
-	        IGroup group, String order) {
+			IGroup group, String order) {
 		r.lock();
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
 		ATables tabs = dbHelper.tables;
 		try {
 
 			Cursor popSpin = database.query(table.getName(), null,
-			        whereCondition, null, null, null, order, "1");
+					whereCondition, null, null, null, order, "1");
 			popSpin.moveToFirst();
 			while (popSpin.isAfterLast() == false) {
 				return tabs.getData(table, popSpin, group);
@@ -115,8 +139,18 @@ public class DataSourceFactory {
 
 	}
 
+	/**
+	 * * Get an object that store in a numbers of row data.
+	 * 
+	 * @param table
+	 * @param whereCondition
+	 * @param group
+	 * @param order
+	 * @param limit
+	 * @return
+	 */
 	public IFieldData[] getRows(ITables table, String whereCondition,
-	        IGroup group, String order, int limit) {
+			IGroup group, String order, int limit) {
 		r.lock();
 		IFieldData[] data = new IFieldData[limit];
 		SQLiteDatabase database = dbHelper.getReadableDatabase();
@@ -124,8 +158,8 @@ public class DataSourceFactory {
 		try {
 
 			Cursor popSpin = database.query(table.getName(), null,
-			        whereCondition, null, null, null, order,
-			        String.valueOf(limit));
+					whereCondition, null, null, null, order,
+					String.valueOf(limit));
 			popSpin.moveToFirst();
 			int i = 0;
 			while (popSpin.isAfterLast() == false) {
@@ -143,8 +177,16 @@ public class DataSourceFactory {
 
 	}
 
+	/**
+	 * Extract an int value to row.
+	 * 
+	 * @param table
+	 * @param whereCondition
+	 * @param columns
+	 * @return
+	 */
 	public int getIntValue(ITables table, String whereCondition,
-	        String[] columns) {
+			String[] columns) {
 		if (columns != null && columns.length > 0) {
 			r.lock();
 			SQLiteDatabase database = dbHelper.getReadableDatabase();
@@ -152,7 +194,7 @@ public class DataSourceFactory {
 			try {
 
 				Cursor popSpin = database.query(table.getName(), columns,
-				        whereCondition, null, null, null, null);
+						whereCondition, null, null, null, null);
 				popSpin.moveToFirst();
 				while (popSpin.isAfterLast() == false) {
 					return popSpin.getInt(popSpin.getColumnIndex(columns[0]));
@@ -171,9 +213,6 @@ public class DataSourceFactory {
 	 * 
 	 * @param table
 	 *            the table where to insert the row.
-	 * @param content
-	 *            the value to insert.
-	 * @return the number of new row or -1 if it doesn't work correctly.
 	 */
 	public long addRowToTable(IFieldData data) {
 		String table = data.getTable();
@@ -182,6 +221,15 @@ public class DataSourceFactory {
 		return y;
 	}
 
+	/**
+	 * Add a row to the table in the database.
+	 * 
+	 * @param table
+	 *            the table where to insert the row.
+	 * @param content
+	 *            the value to insert.
+	 * @return the number of new row or -1 if it doesn't work correctly.
+	 */
 	public long addRowToTable(String table, ContentValues cv) {
 		w.lock();
 		long y = -1;
@@ -196,8 +244,14 @@ public class DataSourceFactory {
 		return y;
 	}
 
+	/**
+	 * Update row.
+	 * 
+	 * @param data
+	 * @param whereCl
+	 * @return
+	 */
 	public long updateRowToTable(IFieldData data, String whereCl) {
-
 		String table = data.getTable();
 		ContentValues content = data.toContentValue();
 		long y = updateRowToTable(table, content, whereCl);
@@ -205,8 +259,16 @@ public class DataSourceFactory {
 
 	}
 
+	/**
+	 * Update row.
+	 * 
+	 * @param table
+	 * @param cv
+	 * @param whereClause
+	 * @return
+	 */
 	public long updateRowToTable(String table, ContentValues cv,
-	        String whereClause) {
+			String whereClause) {
 		w.lock();
 		long y = -1;
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -220,6 +282,9 @@ public class DataSourceFactory {
 		return y;
 	}
 
+	/**
+	 * Remove all table, used when the database is updated.
+	 */
 	public void removeAllTable() {
 		w.lock();
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -228,13 +293,11 @@ public class DataSourceFactory {
 			int l = tableNames.length;
 			for (int i = 0; i < l; i++) {
 				database.delete(tableNames[i], null, null);
-
 			}
 		} finally {
 			w.unlock();
 			closeDb(database);
 		}
-
 	}
 
 	/**
@@ -266,13 +329,19 @@ public class DataSourceFactory {
 
 	}
 
+	/**
+	 * Delete a rows.
+	 * 
+	 * @param table
+	 * @param ifieldata
+	 */
 	public void clearValueToTable(ITables table, IFieldData ifieldata) {
 		w.lock();
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
 		try {
 			if (table != null) {
 				database.delete(table.getName(), ifieldata.getWhereToUpdate(),
-				        null);
+						null);
 			}
 		} finally {
 			closeDb(database);
@@ -281,6 +350,10 @@ public class DataSourceFactory {
 
 	}
 
+	/**
+	 * 
+	 * @return the db path.
+	 */
 	public String getPath() {
 		String value;
 		SQLiteDatabase database = dbHelper.getWritableDatabase();

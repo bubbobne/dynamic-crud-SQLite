@@ -19,7 +19,6 @@ public enum FormatData {
 	}
 
 	public String getDataFormatString() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 }

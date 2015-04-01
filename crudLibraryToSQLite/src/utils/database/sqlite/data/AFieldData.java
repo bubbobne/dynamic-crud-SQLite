@@ -1,4 +1,5 @@
 package utils.database.sqlite.data;
+
 /*
  * This software is released under the terms of the GNU GENERAL PUBLIC LICENSE
  * Version 3.
@@ -32,7 +33,7 @@ public abstract class AFieldData implements IFieldData {
 	protected HashMap<IColumns, Double> doubleValue = new HashMap<IColumns, Double>();
 	protected HashMap<IColumns, String> stringValue = new HashMap<IColumns, String>();
 	protected static DecimalFormat decimalFormat = new DecimalFormat("##.##");
-	boolean register = false;
+	private boolean register = false;
 
 	@Override
 	public boolean isRegistered() {
@@ -45,12 +46,22 @@ public abstract class AFieldData implements IFieldData {
 
 	};
 
+	/**
+	 * Create and initialize the object.
+	 * 
+	 * @param t
+	 */
 	public AFieldData(ITables t) {
 		this.tab = t;
 		init(t);
 
 	}
 
+	/**
+	 * Create and initialize the object.
+	 * 
+	 * @param t
+	 */
 	public AFieldData(Class<? extends IColumns> c, ITables t) {
 		this.tab = t;
 		IColumns[] value = c.getEnumConstants();
@@ -58,11 +69,17 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	/*
+	 * Initialize the value.
+	 */
 	private void init(ITables t) {
 		IColumns[] values = t.getColumns();
 		init(values);
 	}
 
+	/*
+	 * Initialize the value.
+	 */
 	private void init(IColumns[] values) {
 		for (IColumns c : values) {
 			String name = ((Enum) c).name();
@@ -82,6 +99,14 @@ public abstract class AFieldData implements IFieldData {
 		}
 	}
 
+	/**
+	 * 
+	 * Create the object from cursor db.
+	 * 
+	 * @param t
+	 *            the table.
+	 * @param cursor
+	 */
 	public AFieldData(ITables t, Cursor cursor) {
 		this.tab = t;
 		IColumns[] values = t.getColumns();
@@ -91,21 +116,25 @@ public abstract class AFieldData implements IFieldData {
 				if (c.getType().equals(ConstantsDB.INTEGER)) {
 
 					integerValue.put(c,
-					        cursor.getInt(cursor.getColumnIndex(name)));
+							cursor.getInt(cursor.getColumnIndex(name)));
 
 				} else if (c.getType().equals(ConstantsDB.TEXT)) {
 					stringValue.put(c,
-					        cursor.getString(cursor.getColumnIndex(name)));
+							cursor.getString(cursor.getColumnIndex(name)));
 				}
 
 				else if (c.getType().equals(ConstantsDB.REAL)) {
 					doubleValue.put(c,
-					        cursor.getDouble(cursor.getColumnIndex(name)));
+							cursor.getDouble(cursor.getColumnIndex(name)));
 				}
 			}
 		}
 	}
 
+	/**
+	 * @param key
+	 * @return the value of the key.
+	 */
 	public int getIntValue(IColumns key) {
 		if (integerValue.containsKey(key)) {
 			return integerValue.get(key);
@@ -115,6 +144,10 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	/**
+	 * @param key
+	 * @return the value of the key.
+	 */
 	public double getDoubleValue(IColumns key) {
 		if (doubleValue.containsKey(key)) {
 			return doubleValue.get(key);
@@ -124,6 +157,10 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	/**
+	 * @param key
+	 * @return the value of the key.
+	 */
 	public String getStringValue(IColumns key) {
 		if (stringValue.containsKey(key)) {
 			return stringValue.get(key);
@@ -132,18 +169,39 @@ public abstract class AFieldData implements IFieldData {
 		}
 	}
 
+	/**
+	 * Set the value.
+	 * 
+	 * @param key
+	 * @param value
+	 *            to set.
+	 */
 	public void setValue(IColumns key, int value) {
 		if (integerValue.containsKey(key)) {
 			integerValue.put(key, value);
 		}
 	}
 
+	/**
+	 * Set the value.
+	 * 
+	 * @param key
+	 * @param value
+	 *            to set.
+	 */
 	public void setValue(IColumns key, double value) {
 		if (doubleValue.containsKey(key)) {
 			doubleValue.put(key, value);
 		}
 	}
 
+	/**
+	 * Set the value.
+	 * 
+	 * @param key
+	 * @param value
+	 *            to set.
+	 */
 	public void setValue(IColumns key, String value) {
 		if (stringValue.containsKey(key)) {
 			stringValue.put(key, value);
@@ -199,6 +257,12 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	/**
+	 * Subtraction to the integer value.
+	 * 
+	 * @param key
+	 * @return the value stored with this key.
+	 */
 	public int minusIntValue(IColumns key) {
 		int j = ConstantsDB.NO_DATO;
 		if (integerValue.containsKey(key)) {
@@ -224,16 +288,26 @@ public abstract class AFieldData implements IFieldData {
 
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return true if the object have the key.
+	 */
 	public boolean containKeys(IColumns key) {
 		if (doubleValue.containsKey(key) || integerValue.containsKey(key)
-		        || stringValue.containsKey(key)) {
+				|| stringValue.containsKey(key)) {
 			return true;
 		}
-
 		return false;
 
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @param valueToAdd
+	 * @return the value after the sum.
+	 */
 	public double sumValue(IColumns key, double valueToAdd) {
 		if (doubleValue.containsKey(key)) {
 			double v = doubleValue.get(key) + valueToAdd;
@@ -246,7 +320,7 @@ public abstract class AFieldData implements IFieldData {
 	public List<BasicNameValuePair> toList() {
 
 		List<BasicNameValuePair> listParam = new ArrayList<BasicNameValuePair>(
-		        2);
+				2);
 		listParam.add(new BasicNameValuePair("TABELLA", tab.getName()));
 
 		IColumns[] keys = tab.getColumns();
@@ -256,14 +330,14 @@ public abstract class AFieldData implements IFieldData {
 			String type = key.getType();
 			if (type.equals(ConstantsDB.INTEGER)) {
 				listParam.add(new BasicNameValuePair(key.getName(), String
-				        .valueOf(getIntValue(key))));
+						.valueOf(getIntValue(key))));
 			} else if (type.equals(ConstantsDB.REAL)) {
 				listParam.add(new BasicNameValuePair(key.getName(), String
-				        .valueOf(getDoubleValue(key))));
+						.valueOf(getDoubleValue(key))));
 
 			} else if (type.equals(ConstantsDB.TEXT)) {
 				listParam.add(new BasicNameValuePair(key.getName(),
-				        getStringValue(key)));
+						getStringValue(key)));
 
 			}
 		}
