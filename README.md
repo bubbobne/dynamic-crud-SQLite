@@ -10,9 +10,101 @@ It's designed to use in a survey, where each table is related to a form (an acti
 
 ###Example
 
-
+The table:
 
 ```java
-var s = "JavaScript syntax highlighting";
-alert(s);
+public enum Tabelle implements ITables {
+
+	TEST1(Columns.TableTest1.class, ActivityForm1.class,
+	        null), TEST2(
+	        Columns.TableTest2.class, ActivityForm2.class,
+	        null);
+	        
+	        
+	       ...... 
+```
+
+
+The columns:
+
+```java
+public class Columns {
+
+	public enum TableTest1 implements IColumns {
+
+		ID(INTEGER, true), INT1(INTEGER, false), STRING1(TEXT, false), STRING2(
+		        TEXT, false);
+
+		private final String value;
+		private final boolean isPrymary;
+
+		private TableAnagrafica(String value, boolean b) {
+			this.value = value;
+			this.isPrymary = b;
+		}
+
+		@Override
+		public String getType() {
+			// TODO Auto-generated method stub
+			return value;
+		}
+
+		@Override
+		public boolean isPrimary() {
+			// TODO Auto-generated method stub
+			return isPrymary;
+		}
+
+		@Override
+		public String getName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
+
+		@Override
+		public String[] getNames() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
+	public enum TableAppezzamento implements IColumns {
+
+		ID(INTEGER, true), REAL1(REAL, false), STRING3(TEXT, false), STRING4(
+		        TEXT, false);;
+
+		private final String value;
+		private final boolean isPrymary;
+
+		private TableAppezzamento(String value, boolean b) {
+			this.value = value;
+			this.isPrymary = b;
+		}
+
+		@Override
+		public String getType() {
+			// TODO Auto-generated method stub
+			return value;
+		}
+
+		@Override
+		public boolean isPrimary() {
+			// TODO Auto-generated method stub
+			return isPrymary;
+		}
+
+		@Override
+		public String getName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
+
+		@Override
+		public String[] getNames() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
+
 ```
