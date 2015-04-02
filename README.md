@@ -11,9 +11,9 @@ The *ITables* interfaces is an abstraction of the SQLite table, table has to be 
 
 The *IColumns* interface is used as common interface to manage the table fields, every columns is an Enum which values are the type of data and if it's primary key.
 
-The *ATables* allows the users to get some information about a Table or Columns and call the builder of IFieldData from the *ITables* implementation.
+The **ATables** allows the users to get some information about a Table or Columns and call the builder of IFieldData from the *ITables* implementation.
 
-The *IFieldData* is an abstraction of the data survey and it's imlplements by the abstract class *AFieldData*, which allow to get set data, using as keys the IColumns value.
+The *IFieldData* is an abstraction of the data survey and it's imlplements by the abstract class **AFieldData**, which allow to get set data, using as keys the IColumns value.
 
 **DataSourceFactory** is the class that manage the db. It implements Singleton design pattern.
 
