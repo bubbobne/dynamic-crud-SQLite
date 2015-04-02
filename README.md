@@ -7,6 +7,14 @@ To use the library it's necessary implements the *ITables* and  *IColumns* inter
 
 It's designed to use in a survey, where each table is related to a form (an activity).
 
+The *ITables* interfaces is an abstraction of the SQLite table, table has to be an Enum which implements this interfaces. The enum contains info about the columns of this table, the activity related to this table and the group (if data belong to a king of *IGroup*). The Table class have the responsability to build the object (*IFieldData*) used to manage data.
+
+The *IColumns* interface is used as common interface to manage the table fields, every columns is an Enum which values are the type of data and if it's primary key.
+
+The *ATables* allows the users to get some information about a Table or Columns and call the builder of IFieldData from the *ITables* implementation.
+
+The *IFieldData* is an abstraction of the data survey and it's imlplements by the abstract class *AFieldData*, which allow to get set data, using as keys the IColumns value.
+
 
 ###Example
 
