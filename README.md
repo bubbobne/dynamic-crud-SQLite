@@ -15,6 +15,8 @@ The *ATables* allows the users to get some information about a Table or Columns 
 
 The *IFieldData* is an abstraction of the data survey and it's imlplements by the abstract class *AFieldData*, which allow to get set data, using as keys the IColumns value.
 
+**DataSourceFactory** is the class that manage the db. It implements Singleton design pattern.
+
 
 ###Example
 
