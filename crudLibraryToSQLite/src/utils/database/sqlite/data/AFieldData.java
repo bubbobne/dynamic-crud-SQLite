@@ -72,7 +72,7 @@ public abstract class AFieldData implements IFieldData {
 	/*
 	 * Initialize the value.
 	 */
-	private void init(ITables t) {
+	public void init(ITables t) {
 		IColumns[] values = t.getColumns();
 		init(values);
 	}
@@ -80,7 +80,7 @@ public abstract class AFieldData implements IFieldData {
 	/*
 	 * Initialize the value.
 	 */
-	private void init(IColumns[] values) {
+	public void init(IColumns[] values) {
 		for (IColumns c : values) {
 			String name = ((Enum) c).name();
 			if (c.getType().equals(ConstantsDB.INTEGER)) {

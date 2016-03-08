@@ -34,5 +34,7 @@ public class ConstantsDB {
 	 * Data format.
 	 */
 	public static final String DATE = "yyyy-MM-dd";
-
+	public static final String DATA_MODIFICA = "DATA_MODIFICA";
+	public static final int STATO_CANCEL = 2;
+	public static final int STATO_OK = 0;
 }
